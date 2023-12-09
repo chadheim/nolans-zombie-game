@@ -99,6 +99,16 @@ public class RulesTests
     }
 
     [Test]
+    public void ShouldNotMoveBunnyOnToTrap()
+    {
+        WorldState s0 = new WorldStateBuilder(20, 20).PutBunny(0, 10).AddTrap(0, 0, 11).Build();
+
+        WorldState s1 = Rules.MoveBunny(Rules.Direction.Up, s0);
+
+        Assert.AreEqual(s0.bunny.position, s1.bunny.position);
+    }
+
+    [Test]
     public void ShouldMoveZombieLeft()
     {
         WorldState s0 = new WorldStateBuilder(20, 20).AddZombie(0, 10, 10).SetZombieTurn(0).Build();

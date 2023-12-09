@@ -51,6 +51,11 @@ namespace Assets.Core
             return current.turn.Type == Turn.Types.Bunny;
         }
 
+        private static bool BunnyOnTrapCheck(Bunny b, List<Trap> traps)
+        {
+            return traps.Exists(t => t.position == b.position);
+        }
+
         public static WorldState MoveBunny(Direction direction, WorldState current)
         {
             if (!BunnyTurnCheck(current))
@@ -63,6 +68,11 @@ namespace Assets.Core
             next.turn = ChooseNextTurn(current);
 
             next.bunny.position = Translate(direction, next.bunny.position);
+
+            if(BunnyOnTrapCheck(next.bunny, next.traps))
+            {
+                return current;
+            }
 
             if (!WorldBoundsCheck(next, next.bunny.position))
             {
