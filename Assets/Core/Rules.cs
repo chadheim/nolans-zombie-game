@@ -56,6 +56,11 @@ namespace Assets.Core
             return traps.Exists(t => t.position == b.position);
         }
 
+        private static bool BunnyOnZombieCheck(Bunny b, List<Zombie> zombies)
+        {
+            return zombies.Exists(z => z.alive && z.position == b.position);
+        }
+
         public static WorldState MoveBunny(Direction direction, WorldState current)
         {
             if (!BunnyTurnCheck(current))
@@ -69,7 +74,7 @@ namespace Assets.Core
 
             next.bunny.position = Translate(direction, next.bunny.position);
 
-            if(BunnyOnTrapCheck(next.bunny, next.traps))
+            if (BunnyOnTrapCheck(next.bunny, next.traps))
             {
                 return current;
             }
@@ -77,6 +82,11 @@ namespace Assets.Core
             if (!WorldBoundsCheck(next, next.bunny.position))
             {
                 return current;
+            }
+
+            if (BunnyOnZombieCheck(next.bunny, next.zombies))
+            {
+                next.bunny.alive = false;
             }
 
             return next;

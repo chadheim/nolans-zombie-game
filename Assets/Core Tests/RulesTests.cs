@@ -197,11 +197,22 @@ public class RulesTests
     }
 
     [Test]
-    public void ShouldMarkBunnyDeadWhenZombieOnBunnyAfterMove()
+    public void ShouldMarkBunnyDeadWhenBunnyOnZombieAfterZombieMove()
     {
         WorldState s0 = new WorldStateBuilder(20, 20).PutBunny(10, 10).AddZombie(0, 9, 10).SetZombieTurn(0).Build();
 
         WorldState s1 = Rules.MoveZombie(0, Rules.Direction.Right, s0);
+
+        Assert.AreEqual(s1.bunny.position, s1.zombies.First().position);
+        Assert.IsFalse(s1.bunny.alive);
+    }
+
+    [Test]
+    public void ShouldMarkBunnyDeadWhenBunnyOnZombieAfterBunnyMove()
+    {
+        WorldState s0 = new WorldStateBuilder(20, 20).PutBunny(10, 10).AddZombie(0, 9, 10).Build();
+
+        WorldState s1 = Rules.MoveBunny(Rules.Direction.Left, s0);
 
         Assert.AreEqual(s1.bunny.position, s1.zombies.First().position);
         Assert.IsFalse(s1.bunny.alive);

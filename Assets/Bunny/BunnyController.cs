@@ -19,13 +19,10 @@ public class BunnyController : MonoBehaviour
     {
         var bunny = state.bunny;
 
-        animator.SetBool("IsDead", !bunny.alive);
+        spriteRenderer.sortingOrder = 100 - bunny.position.y;
 
-        if (bunny.alive)
+        if (!Mathf.Approximately(bunny.position.x, transform.position.x) || !Mathf.Approximately(bunny.position.y, transform.position.y))
         {
-            if (Mathf.Approximately(bunny.position.x, transform.position.x) && Mathf.Approximately(bunny.position.y, transform.position.y))
-                yield break;
-
             animator.SetBool("IsRunning", true);
 
             var target = new Vector3(bunny.position.x, bunny.position.y, 0);
@@ -46,5 +43,7 @@ public class BunnyController : MonoBehaviour
 
             animator.SetBool("IsRunning", false);
         }
+
+        animator.SetBool("IsDead", !bunny.alive);
     }
 }
